@@ -1,0 +1,285 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Design tokens — warm paper, ink, burnt orange. Inspired by the reference's
+   editorial warmth, but original to this project.
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+  --paper: 246 243 241;
+  --surface: 252 250 249;
+  --raised: 255 255 255;
+  --ink: 20 20 19;
+  --muted: 117 108 102;
+  --line: 224 219 215;
+  --accent: 193 64 0;
+  --ember: 255 103 27;
+  --olive: 47 107 58;
+  --danger: 179 38 30;
+  --sand: 223 209 200;
+  --glow: 193 64 0;
+  color-scheme: light;
+}
+
+.dark {
+  --paper: 17 17 16;
+  --surface: 26 25 24;
+  --raised: 34 32 30;
+  --ink: 245 241 237;
+  --muted: 166 157 150;
+  --line: 56 52 49;
+  --accent: 255 122 46;
+  --ember: 255 142 74;
+  --olive: 122 186 130;
+  --danger: 255 128 118;
+  --sand: 60 52 46;
+  --glow: 255 122 46;
+  color-scheme: dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-paper font-sans text-ink antialiased;
+  font-feature-settings: 'ss01' on, 'cv11' on;
+  letter-spacing: -0.011em;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(var(--accent) / 0.18);
+  color: rgb(var(--ink));
+}
+
+/* Thin, warm scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--line)) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--line));
+  border-radius: 999px;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Typographic scale ─────────────────────────────────────────────────────── */
+.display {
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+.display em,
+.serif-accent {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+.eyebrow {
+  @apply text-[11px] font-bold uppercase tracking-[0.18em] text-muted;
+}
+.mono {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  letter-spacing: -0.02em;
+}
+
+/* ── Layout helpers ────────────────────────────────────────────────────────── */
+.container-x {
+  @apply mx-auto w-full max-w-[1240px] px-5 sm:px-7 lg:px-10;
+}
+.section-pad {
+  @apply py-20 sm:py-28;
+}
+.hairline {
+  border-color: rgb(var(--line));
+}
+
+/* Paper grain + warm glow */
+.paper-grain {
+  position: relative;
+  isolation: isolate;
+}
+.paper-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+.dark .paper-grain::before {
+  mix-blend-mode: screen;
+  opacity: 0.16;
+}
+.warm-glow {
+  background:
+    radial-gradient(60% 55% at 78% 8%, rgb(var(--ember) / 0.13), transparent 70%),
+    radial-gradient(45% 45% at 10% 40%, rgb(var(--sand) / 0.35), transparent 75%);
+}
+.dark .warm-glow {
+  background:
+    radial-gradient(60% 55% at 78% 8%, rgb(var(--ember) / 0.12), transparent 70%),
+    radial-gradient(45% 45% at 10% 40%, rgb(var(--accent) / 0.06), transparent 75%);
+}
+
+/* ── Components ────────────────────────────────────────────────────────────── */
+@layer components {
+  .card {
+    @apply rounded-3xl border border-line bg-surface;
+  }
+  .card-lift {
+    @apply transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift;
+  }
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-full text-sm font-semibold transition-all duration-200 disabled:pointer-events-none disabled:opacity-45;
+    padding: 0.72rem 1.25rem;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white shadow-[0_10px_24px_-14px_rgb(var(--accent))] hover:brightness-110 active:scale-[0.985];
+  }
+  .btn-ink {
+    @apply btn bg-ink text-paper hover:opacity-90 active:scale-[0.985];
+  }
+  .btn-outline {
+    @apply btn border border-line bg-transparent text-ink hover:border-ink/40 hover:bg-ink/[0.03];
+  }
+  .btn-ghost {
+    @apply btn text-ink hover:bg-ink/[0.055];
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:brightness-110;
+  }
+  .btn-sm {
+    @apply rounded-full text-xs;
+    padding: 0.48rem 0.85rem;
+  }
+  .btn-lg {
+    @apply text-[15px];
+    padding: 0.9rem 1.6rem;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-paper/60 px-2.5 py-1 text-[11px] font-semibold text-muted;
+  }
+  .input {
+    @apply w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-ink placeholder:text-muted/60 transition focus:border-accent/60 focus:outline-none focus:ring-4 focus:ring-accent/10;
+  }
+  .label {
+    @apply mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-muted;
+  }
+  .kbd {
+    @apply rounded-md border border-line bg-paper px-1.5 py-0.5 font-mono text-[10px] text-muted;
+  }
+  .table-head {
+    @apply text-left text-[11px] font-bold uppercase tracking-[0.12em] text-muted;
+  }
+  .side-link {
+    @apply flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted transition hover:bg-ink/[0.04] hover:text-ink;
+  }
+  .side-link-active {
+    @apply side-link bg-ink text-paper hover:bg-ink hover:text-paper;
+  }
+  .skeleton {
+    @apply rounded-xl bg-line/60;
+    background-image: linear-gradient(
+      90deg,
+      rgb(var(--line) / 0.35) 0px,
+      rgb(var(--line) / 0.8) 160px,
+      rgb(var(--line) / 0.35) 320px
+    );
+    background-size: 600px 100%;
+    @apply animate-shimmer;
+  }
+  .stat-value {
+    @apply text-[28px] font-semibold leading-none tracking-[-0.045em] sm:text-[32px];
+  }
+  .link-underline {
+    @apply relative text-ink no-underline;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+/* ── Utility extras ────────────────────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.text-balance {
+  text-wrap: balance;
+}
+.text-pretty {
+  text-wrap: pretty;
+}
+.gradient-text {
+  background: linear-gradient(100deg, rgb(var(--accent)), rgb(var(--ember)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.grid-lines {
+  background-image:
+    linear-gradient(to right, rgb(var(--line) / 0.55) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--line) / 0.55) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 78%);
+}
+
+/* Recharts tweaks */
+.recharts-cartesian-axis-tick-value {
+  font-size: 11px;
+  fill: rgb(var(--muted));
+}
+.recharts-default-tooltip {
+  border-radius: 14px !important;
+  border: 1px solid rgb(var(--line)) !important;
+  background: rgb(var(--surface)) !important;
+  color: rgb(var(--ink)) !important;
+  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.35) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

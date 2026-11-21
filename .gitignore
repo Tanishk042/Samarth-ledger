@@ -1,0 +1,20 @@
+node_modules
+dist
+dist-ssr
+.env
+.env.local
+.env.*.local
+
+# hardhat
+contracts/node_modules
+contracts/artifacts
+contracts/cache
+contracts/typechain-types
+contracts/.env
+
+# os / editor
+.DS_Store
+*.local
+.vscode/*
+!.vscode/extensions.json
+.vercel
